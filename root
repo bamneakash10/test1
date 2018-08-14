@@ -1,0 +1,17 @@
+#!/bin/bash
+sudo passwd root
+sudo chmod o+w /usr/share/lightdm/lightdm.conf.d/50-ubuntu.conf
+sudo echo "greeter-show-manual-login=true" | cat >> /usr/share/lightdm/lightdm.conf.d/50-ubuntu.conf
+sudo chmod o-w /usr/share/lightdm/lightdm.conf.d/50-ubuntu.conf
+sudo chmod o+w /etc/lightdm
+sudo ls /etc/lightdm/lightdm.conf
+if test "$?" -eq "0" ; then 
+sudo sed -i 's/autologin-user=assessment/autologin-user=root/' /etc/lightdm/lightdm.conf
+else 
+sudo echo -e '[SeatDefaults]\nautologin-user=root' | cat > /etc/lightdm/lightdm.conf
+fi
+sudo chmod o-w /etc/lightdm
+sudo sed -i 's/mesg n/if `tty -s`; then \n mesg n \n fi/' /root/.profile
+sudo init 6
+
+
